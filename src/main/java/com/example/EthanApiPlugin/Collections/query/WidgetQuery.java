@@ -1,19 +1,16 @@
-package com.example.EthanApiPlugin;
+package com.example.EthanApiPlugin.Collections.query;
 
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.util.Text;
 import net.runelite.client.util.WildcardMatcher;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class WidgetQuery {
     List<Widget> widgets;
 
-    WidgetQuery(HashSet<Widget> widgets) {
+    public WidgetQuery(HashSet<Widget> widgets) {
         this.widgets = new ArrayList<>(widgets);
     }
 
@@ -43,6 +40,9 @@ public class WidgetQuery {
     public WidgetQuery withItemId(int itemId) {
         widgets = widgets.stream().filter(widget -> widget.getItemId() == itemId).collect(java.util.stream.Collectors.toList());
         return this;
+    }
+    public Optional<Widget> first() {
+        return widgets.stream().findFirst();
     }
 
     public WidgetQuery nonPlaceHolder() {
