@@ -1,8 +1,8 @@
 package nulled.ezclick;
 
+import com.example.EthanApiPlugin.Collections.Inventory;
+import com.example.EthanApiPlugin.Collections.TileObjects;
 import com.example.EthanApiPlugin.EthanApiPlugin;
-import com.example.EthanApiPlugin.Inventory;
-import com.example.EthanApiPlugin.TileObjects;
 
 import com.example.PacketUtils.PacketUtilsPlugin;
 import com.example.Packets.MousePackets;
