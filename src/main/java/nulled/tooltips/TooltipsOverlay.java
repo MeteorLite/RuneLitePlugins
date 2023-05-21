@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.example.tooltips;
+package nulled.tooltips;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
@@ -36,13 +36,13 @@ import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.tooltip.Tooltip;
+import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 
 import javax.inject.Inject;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Set;
 
-import static com.example.ezclick.EZClickPlugin.*;
+import static nulled.ezclick.EZClickPlugin.*;
 
 public class TooltipsOverlay extends Overlay
 {
@@ -75,20 +75,21 @@ public class TooltipsOverlay extends Overlay
 		MenuAction.CC_OP
 	);
 
-	private final TooltipManager tooltipManager = TooltipManager.INSTANCE;
+	private final TooltipManager tooltipManager;
 	private final Client client;
 	private final TooltipsConfig config;
 
 
 
 	@Inject
-	TooltipsOverlay(Client client, TooltipsConfig config)
+	TooltipsOverlay(Client client, TooltipsConfig config, TooltipManager tooltipManager)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		// additionally allow tooltips above the full screen world map and welcome screen
 		drawAfterInterface(WidgetID.FULLSCREEN_CONTAINER_TLI);
 		this.client = client;
+		this.tooltipManager = tooltipManager;
 		this.config = config;
 	}
 
@@ -173,19 +174,23 @@ public class TooltipsOverlay extends Overlay
 		{
 			return null;
 		}
-		for (com.example.tooltips.Tooltip tooltip : headerTooltips) {
+
+		for (Tooltip tooltip : headerTooltips) {
 			tooltipManager.add(tooltip);
 		}
 
-		for (com.example.tooltips.Tooltip tooltip : problemTooltips) {
+		for (Tooltip tooltip : problemTooltips) {
 			tooltipManager.add(tooltip);
 		}
 
-		Tooltip t = new Tooltip(option + (Strings.isNullOrEmpty(target) ? "" : " " + target));
-		tooltipManager.add(t);
-
-		for (com.example.tooltips.Tooltip tooltip : footerTooltips) {
+		for (Tooltip tooltip : validTooltips) {
 			tooltipManager.add(tooltip);
+		}
+
+		//Draw normal click tooltips on top
+		if (!ezClickActive) {
+			Tooltip t = new Tooltip(option + (Strings.isNullOrEmpty(target) ? "" : " " + target));
+			tooltipManager.addFront(t);
 		}
 		return null;
 	}

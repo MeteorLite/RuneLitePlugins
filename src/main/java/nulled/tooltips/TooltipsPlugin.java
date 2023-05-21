@@ -22,14 +22,16 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.example.tooltips;
+package nulled.tooltips;
 
 import com.google.inject.Provides;
+import net.runelite.api.events.ClientTick;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.plugins.mousehighlight.MouseHighlightConfig;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.ui.overlay.tooltip.TooltipManager;
 
 import javax.inject.Inject;
 
@@ -48,6 +50,9 @@ public class TooltipsPlugin extends Plugin
 
 	@Inject
 	private TooltipOverlay tooltipOverlay;
+
+	@Inject
+	private TooltipManager tooltipManager;
 
 	@Provides
     TooltipsConfig provideConfig(ConfigManager configManager)

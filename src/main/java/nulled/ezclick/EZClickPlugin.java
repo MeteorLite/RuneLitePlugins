@@ -1,4 +1,4 @@
-package com.example.ezclick;
+package nulled.ezclick;
 
 import com.example.EthanApiPlugin.EthanApiPlugin;
 import com.example.EthanApiPlugin.Inventory;
@@ -7,7 +7,6 @@ import com.example.EthanApiPlugin.TileObjects;
 import com.example.PacketUtils.PacketUtilsPlugin;
 import com.example.Packets.MousePackets;
 import com.example.Packets.ObjectPackets;
-import com.example.tooltips.*;
 import net.runelite.api.Client;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.TileObject;
@@ -18,8 +17,12 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.ui.overlay.tooltip.Tooltip;
+import net.runelite.client.ui.overlay.tooltip.TooltipManager;
+import net.runelite.client.util.ColorUtil;
 
 import javax.inject.Inject;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,17 +34,20 @@ public class EZClickPlugin extends Plugin {
     @Inject
     public Client client;
 
-    public TooltipManager tooltipManager = TooltipManager.INSTANCE;
+    @Inject
+    public TooltipManager tooltipManager;
 
     public static ArrayList<Tooltip> headerTooltips = new ArrayList<>();
 
-    public static ArrayList<com.example.tooltips.Tooltip> problemTooltips = new ArrayList<>();
+    public static ArrayList<Tooltip> problemTooltips = new ArrayList<>();
 
-    public static ArrayList<com.example.tooltips.Tooltip> footerTooltips = new ArrayList<>();
+    public static ArrayList<Tooltip> validTooltips = new ArrayList<>();
 
-    Tooltip header = new Tooltip("EZClick", TooltipColors.BLUE);
+    Tooltip header = new Tooltip(ColorUtil.prependColorTag("EZClick", Color.CYAN));
 
-    Tooltip missingBonesTooltip = new Tooltip("Missing: Bones to offer", TooltipColors.RED);
+    Tooltip missingBonesTooltip = new Tooltip(ColorUtil.prependColorTag("Missing: Bones to offer", Color.RED));
+
+    Tooltip boneToOfferTooltip = new Tooltip("");
 
     public static boolean ezClickActive = false;
     public static boolean ezHouseAltar = false;
@@ -63,12 +69,18 @@ public class EZClickPlugin extends Plugin {
         ezHouseAltar = false;
         headerTooltips.clear();
         problemTooltips.clear();
-        footerTooltips.clear();
+        validTooltips.clear();
     }
 
     public void addIfMissing(ArrayList<Tooltip> list, Tooltip tooltip) {
-        if (!list.contains(tooltip))
+
+        if (!list.contains(tooltip)) {
+            if (list == headerTooltips)
+                tooltip.setText(ColorUtil.prependColorTag(tooltip.getText(), Color.CYAN));
+            if (list == problemTooltips)
+                tooltip.setText(ColorUtil.prependColorTag(tooltip.getText(), Color.RED));
             list.add(tooltip);
+        }
     }
 
     public Widget boneToOffer = null;
@@ -87,6 +99,8 @@ public class EZClickPlugin extends Plugin {
                 addIfMissing(problemTooltips, missingBonesTooltip);
             } else {
                 boneToOffer = bonesToOffer.get(0);
+                boneToOfferTooltip.setText(ColorUtil.prependColorTag(boneToOffer.getName(), Color.GREEN));
+                addIfMissing(validTooltips, boneToOfferTooltip);
                 altar = TileObjects.search().nameContains("Altar").withAction("Pray").result().get(0);
             }
         }

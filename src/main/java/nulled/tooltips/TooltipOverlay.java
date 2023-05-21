@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package com.example.tooltips;
+package nulled.tooltips;
 
 import java.awt.*;
 import java.util.List;
@@ -39,22 +39,29 @@ import net.runelite.client.ui.overlay.OverlayPriority;
 import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TooltipComponent;
+import net.runelite.client.ui.overlay.tooltip.Tooltip;
+import net.runelite.client.ui.overlay.tooltip.TooltipManager;
+
+import static net.runelite.client.ui.overlay.components.ComponentConstants.STANDARD_BACKGROUND_COLOR;
 
 @Singleton
 public class TooltipOverlay extends Overlay
 {
 	private static final int UNDER_OFFSET = 24;
 	private static final int PADDING = 2;
-	private final TooltipManager tooltipManager = TooltipManager.INSTANCE;
+	private final TooltipManager tooltipManager;
 	private final Client client;
 	private final RuneLiteConfig runeLiteConfig;
 
 	private int prevWidth, prevHeight;
 
+
+
 	@Inject
-	private TooltipOverlay(Client client, final RuneLiteConfig runeLiteConfig)
+	private TooltipOverlay(Client client, final RuneLiteConfig runeLiteConfig, TooltipManager tooltipManager)
 	{
 		this.client = client;
+		this.tooltipManager = tooltipManager;
 		this.runeLiteConfig = runeLiteConfig;
 		setPosition(OverlayPosition.TOOLTIP);
 		setPriority(OverlayPriority.HIGHEST);
@@ -100,11 +107,7 @@ public class TooltipOverlay extends Overlay
 		{
 			final LayoutableRenderableEntity entity;
 
-			Color backgroundColor = TooltipColors.STANDARD_BACKGROUND_COLOR;
-			if (tooltip instanceof Tooltip) {
-				if (((Tooltip) tooltip).color != null)
-					backgroundColor = ((Tooltip) tooltip).color;
-			}
+			Color backgroundColor = STANDARD_BACKGROUND_COLOR;
 			if (tooltip.getComponent() != null)
 			{
 				entity = tooltip.getComponent();
