@@ -22,60 +22,46 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package nulled.plugins.tooltips;
+package nulled.plugins.tooltips
 
-import com.google.inject.Provides;
-import net.runelite.api.events.ItemSpawned;
-import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.plugins.Plugin;
-import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.ui.overlay.tooltip.TooltipManager;
+import com.google.inject.Provides
+import net.runelite.api.events.ItemSpawned
+import net.runelite.client.config.ConfigManager
+import net.runelite.client.eventbus.Subscribe
+import net.runelite.client.plugins.Plugin
+import net.runelite.client.plugins.PluginDescriptor
+import net.runelite.client.ui.overlay.OverlayManager
+import net.runelite.client.ui.overlay.tooltip.TooltipManager
+import javax.inject.Inject
 
-import javax.inject.Inject;
+@PluginDescriptor(name = "Tooltips", tags = ["null"], conflicts = ["Mouse Tooltips"])
+class TooltipsPlugin : Plugin() {
+    @Inject
+    lateinit var overlayManager: OverlayManager
 
-@PluginDescriptor(
-	name = "Tooltips",
-	tags = {"null"},
-	conflicts = {"Mouse Tooltips"}
-)
-public class TooltipsPlugin extends Plugin
-{
-	@Inject
-	private OverlayManager overlayManager;
+    @Inject
+    lateinit var tooltipsOverlay: TooltipsOverlay
 
-	@Inject
-	private TooltipsOverlay tooltipsOverlay;
+    @Inject
+    lateinit var tooltipOverlay: TooltipOverlay
 
-	@Inject
-	private TooltipOverlay tooltipOverlay;
+    @Inject
+    lateinit var tooltipManager: TooltipManager
 
-	@Inject
-	private TooltipManager tooltipManager;
+    @Provides
+    fun provideConfig(configManager: ConfigManager): TooltipsConfig {
+        return configManager.getConfig(TooltipsConfig::class.java)
+    }
 
-	@Provides
-    TooltipsConfig provideConfig(ConfigManager configManager)
-	{
-		return configManager.getConfig(TooltipsConfig.class);
-	}
+    @Throws(Exception::class)
+    override fun startUp() {
+        overlayManager.add(tooltipsOverlay)
+        overlayManager.add(tooltipOverlay)
+    }
 
-	@Override
-	protected void startUp() throws Exception
-	{
-		overlayManager.add(tooltipsOverlay);
-		overlayManager.add(tooltipOverlay);
-	}
-
-	@Override
-	protected void shutDown() throws Exception
-	{
-		overlayManager.remove(tooltipsOverlay);
-		overlayManager.remove(tooltipOverlay);
-	}
-
-	@Subscribe
-	public void onItemSpawned(ItemSpawned itemSpawned) {
-
-	}
+    @Throws(Exception::class)
+    override fun shutDown() {
+        overlayManager.remove(tooltipsOverlay)
+        overlayManager.remove(tooltipOverlay)
+    }
 }
