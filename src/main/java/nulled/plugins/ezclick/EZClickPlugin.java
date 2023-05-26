@@ -1,4 +1,4 @@
-package nulled.ezclick;
+package nulled.plugins.ezclick;
 
 import com.example.EthanApiPlugin.Collections.Inventory;
 import com.example.EthanApiPlugin.Collections.TileObjects;

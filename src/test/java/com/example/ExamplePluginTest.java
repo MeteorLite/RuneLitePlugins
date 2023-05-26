@@ -13,10 +13,10 @@ import com.example.gauntletFlicker.gauntletFlicker;
 import com.example.harpoon2ticker.SwordFish2Tick;
 import com.example.superglass.SuperGlassMakerPlugin;
 import nulled.core.ExtPlugin;
-import nulled.ezclick.EZClickPlugin;
+import nulled.plugins.ezclick.EZClickPlugin;
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
-import nulled.tooltips.TooltipsPlugin;
+import nulled.plugins.tooltips.TooltipsPlugin;
 
 public class ExamplePluginTest
 {

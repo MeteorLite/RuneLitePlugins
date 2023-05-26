@@ -22,7 +22,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package nulled.tooltips;
+package nulled.plugins.tooltips;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
@@ -42,7 +42,7 @@ import javax.inject.Inject;
 import java.awt.*;
 import java.util.Set;
 
-import static nulled.ezclick.EZClickPlugin.*;
+import static nulled.plugins.ezclick.EZClickPlugin.*;
 
 public class TooltipsOverlay extends Overlay
 {

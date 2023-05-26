@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, Aria <aria@ar1as.space>
+ * Copyright (c) 2018, Morgan Lewis <https://github.com/MESLewis>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -22,61 +22,45 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package nulled.tooltips;
+package nulled.plugins.tooltips;
 
-import com.google.inject.Provides;
-import net.runelite.api.events.ClientTick;
-import net.runelite.api.events.ItemSpawned;
-import net.runelite.client.config.ConfigManager;
-import net.runelite.client.eventbus.Subscribe;
-import net.runelite.client.plugins.Plugin;
-import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.overlay.OverlayManager;
-import net.runelite.client.ui.overlay.tooltip.TooltipManager;
+import net.runelite.client.config.Config;
+import net.runelite.client.config.ConfigGroup;
+import net.runelite.client.config.ConfigItem;
 
-import javax.inject.Inject;
-
-@PluginDescriptor(
-	name = "Tooltips",
-	tags = {"null"},
-	conflicts = {"Mouse Tooltips"}
-)
-public class TooltipsPlugin extends Plugin
+@ConfigGroup("mousehighlight")
+public interface TooltipsConfig extends Config
 {
-	@Inject
-	private OverlayManager overlayManager;
-
-	@Inject
-	private TooltipsOverlay tooltipsOverlay;
-
-	@Inject
-	private TooltipOverlay tooltipOverlay;
-
-	@Inject
-	private TooltipManager tooltipManager;
-
-	@Provides
-    TooltipsConfig provideConfig(ConfigManager configManager)
+	@ConfigItem(
+		position = 0,
+		keyName = "uiTooltip",
+		name = "Interface Tooltips",
+		description = "Whether or not tooltips are shown on interfaces"
+	)
+	default boolean uiTooltip()
 	{
-		return configManager.getConfig(TooltipsConfig.class);
+		return true;
 	}
 
-	@Override
-	protected void startUp() throws Exception
+	@ConfigItem(
+		position = 1,
+		keyName = "chatboxTooltip",
+		name = "Chatbox Tooltips",
+		description = "Whether or not tooltips are shown over the chatbox"
+	)
+	default boolean chatboxTooltip()
 	{
-		overlayManager.add(tooltipsOverlay);
-		overlayManager.add(tooltipOverlay);
+		return true;
 	}
 
-	@Override
-	protected void shutDown() throws Exception
+	@ConfigItem(
+		position = 2,
+		keyName = "disableSpellbooktooltip",
+		name = "Disable Spellbook Tooltips",
+		description = "Disable Spellbook Tooltips so they don't cover descriptions"
+	)
+	default boolean disableSpellbooktooltip()
 	{
-		overlayManager.remove(tooltipsOverlay);
-		overlayManager.remove(tooltipOverlay);
-	}
-
-	@Subscribe
-	public void onItemSpawned(ItemSpawned itemSpawned) {
-
+		return false;
 	}
 }
