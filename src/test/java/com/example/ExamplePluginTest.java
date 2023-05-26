@@ -33,7 +33,7 @@ public class ExamplePluginTest
 
 				//Null
 				ExtPlugin.class,
-				
+
 				TooltipsPlugin.class, EZClickPlugin.class
 				);
 		RuneLite.main(args);
