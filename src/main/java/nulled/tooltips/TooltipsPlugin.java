@@ -26,6 +26,7 @@ package nulled.tooltips;
 
 import com.google.inject.Provides;
 import net.runelite.api.events.ClientTick;
+import net.runelite.api.events.ItemSpawned;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
@@ -72,5 +73,10 @@ public class TooltipsPlugin extends Plugin
 	{
 		overlayManager.remove(tooltipsOverlay);
 		overlayManager.remove(tooltipOverlay);
+	}
+
+	@Subscribe
+	public void onItemSpawned(ItemSpawned itemSpawned) {
+
 	}
 }

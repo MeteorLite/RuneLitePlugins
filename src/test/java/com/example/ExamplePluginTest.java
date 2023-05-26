@@ -3,6 +3,7 @@ package com.example;
 import com.example.EthanApiPlugin.EthanApiPlugin;
 import com.example.PacketUtils.PacketUtilsPlugin;
 import com.example.PrayerFlicker.EthanPrayerFlickerPlugin;
+import nulled.core.ExtPlugin;
 import nulled.ezclick.EZClickPlugin;
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
@@ -19,6 +20,7 @@ public class ExamplePluginTest
 				EthanPrayerFlickerPlugin.class,
 
 				//Null
+				ExtPlugin.class,
 				TooltipsPlugin.class, EZClickPlugin.class
 				);
 		RuneLite.main(args);
