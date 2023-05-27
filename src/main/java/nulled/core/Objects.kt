@@ -59,7 +59,10 @@ object Objects {
      * @param ids the object ids we should filter for
      */
     fun getFirst(vararg ids: Int): TileObject? {
-        return getAll(*ids)?.firstOrNull() // { it.distanceTo(Main.client.localPlayer) }
+        return getAll(*ids)?.minByOrNull {
+            it.localLocation.distanceTo(
+                    API.client.localPlayer.localLocation)
+        }
     }
 
     /**
@@ -67,7 +70,10 @@ object Objects {
      * @param name the object name we should filter for
      */
     fun getFirst(name: String): TileObject? {
-        return getAll(name)?.firstOrNull() // { it.distanceTo(Main.client.localPlayer) }
+        return getAll(name)?.minByOrNull {
+            it.localLocation.distanceTo(
+                    API.client.localPlayer.localLocation)
+        }
     }
 
     /**

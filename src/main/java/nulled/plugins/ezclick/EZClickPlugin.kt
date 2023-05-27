@@ -36,7 +36,7 @@ class EZClickPlugin : Plugin() {
     var missingBonesTooltip = Tooltip(ColorUtil.prependColorTag("Missing: Bones to offer", Color.RED))
     var boneToOfferTooltip = Tooltip("")
 
-    @Subscribe(priority = Int.MAX_VALUE.toFloat())
+    @Subscribe(priority = Float.MAX_VALUE)
     fun onClientTick(clientTick: ClientTick?) {
         //RL flips entries frequently
         for (entry in client.menuEntries) {

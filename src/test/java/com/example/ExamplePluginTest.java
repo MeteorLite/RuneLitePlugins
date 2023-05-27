@@ -13,6 +13,8 @@ import com.example.gauntletFlicker.gauntletFlicker;
 import com.example.harpoon2ticker.SwordFish2Tick;
 import com.example.superglass.SuperGlassMakerPlugin;
 import nulled.core.ExtPlugin;
+import nulled.plugins.ReplacerPlugin;
+import nulled.plugins.agility.AgilityPlugin;
 import nulled.plugins.ezclick.EZClickPlugin;
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
@@ -32,9 +34,12 @@ public class ExamplePluginTest
 				SuperGlassMakerPlugin.class, UpkeepPlugin.class,
 
 				//Null
-				ExtPlugin.class,
+				ExtPlugin.class, ReplacerPlugin.class,
 
-				TooltipsPlugin.class, EZClickPlugin.class
+				EZClickPlugin.class,
+
+				//RuneLite replacements
+				AgilityPlugin.class, TooltipsPlugin.class
 				);
 		RuneLite.main(args);
 	}

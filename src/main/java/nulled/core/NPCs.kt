@@ -2,6 +2,7 @@ package nulled.core
 
 import net.runelite.api.NPC
 import net.runelite.api.coords.WorldPoint
+import nulled.ext.Loots.tile
 import nulled.ext.NPCs.transformedId
 import nulled.ext.NPCs.transformedName
 
@@ -34,9 +35,10 @@ object NPCs {
         }
         npcs?.let {
             if (sortByDistance) {
-                //TODO: Fix sorting by distance
-                return ArrayList(it)
-                //return ArrayList(it.sortedBy { npc -> npc.distanceTo(Main.client.localPlayer) })
+                return ArrayList(it.sortedBy { npc ->
+                    npc.localLocation.distanceTo(
+                            API.client.localPlayer.localLocation)
+                })
             }
         }
         return npcs

@@ -11,6 +11,9 @@ import nulled.ext.Loots.tile
         tags = ["null"],
         enabledByDefault = true,
         hidden = true)
+/**
+ * This helps us set some information for our extension functions
+ */
 class ExtPlugin : Plugin() {
     @Subscribe(priority = Float.MAX_VALUE)
     fun onItemSpawned(itemSpawned: ItemSpawned) {

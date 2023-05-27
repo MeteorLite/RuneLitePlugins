@@ -5,6 +5,7 @@ import net.runelite.api.coords.WorldPoint
 import nulled.ext.Loots.getWorldLocation
 import nulled.ext.Loots.name
 import nulled.ext.Loots.notedId
+import nulled.ext.Loots.tile
 import nulled.ext.Loots.worldX
 import nulled.ext.Loots.worldY
 
@@ -65,9 +66,10 @@ object Loots {
         }
         loots?.let {
             if (sortByDistance) {
-                //TODO: Fix sorting by distance
-                return ArrayList(it)
-                //return ArrayList(it.sortedBy { loot -> API.client.localPlayer?.let { it1 -> loot.distanceTo(it1) } })
+                return ArrayList(it.sortedBy { loot ->
+                    loot.tile!!.localLocation.distanceTo(
+                            API.client.localPlayer.localLocation)
+                })
             }
         }
         return loots

@@ -35,6 +35,9 @@ import net.runelite.client.ui.overlay.tooltip.TooltipManager
 import javax.inject.Inject
 
 @PluginDescriptor(name = "Tooltips", tags = ["null"], conflicts = ["Mouse Tooltips"])
+/**
+ * We modify the way tooltips draw so we can sort them nicely for things such as EZClick
+ */
 class TooltipsPlugin : Plugin() {
     @Inject
     lateinit var overlayManager: OverlayManager
