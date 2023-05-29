@@ -29,7 +29,6 @@ import javax.swing.*;
 @PluginDescriptor(
         name = "Packet Utils",
         description = "Packet Utils for Plugins",
-        enabledByDefault = true,
         tags = {"ethan"}
 )
 public class PacketUtilsPlugin extends Plugin {

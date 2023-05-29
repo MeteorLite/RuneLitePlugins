@@ -1,5 +1,7 @@
 package nulled.plugins
 
+import com.example.EthanApiPlugin.EthanApiPlugin
+import com.example.PacketUtils.PacketUtilsPlugin
 import net.runelite.client.eventbus.EventBus
 import net.runelite.client.events.ExternalPluginsChanged
 import net.runelite.client.plugins.Plugin
@@ -19,11 +21,13 @@ import javax.inject.Inject
 @PluginDependency(XpTrackerPlugin::class)
 @PluginDependency(AgilityPlugin::class)
 @PluginDependency(MouseHighlightPlugin::class)
+@PluginDependency(EthanApiPlugin::class)
+@PluginDependency(PacketUtilsPlugin::class)
 /**
  * We rebuild some modified runelite plugins
  * We remove the original plugins from the list to prevent confusion
  */
-class ReplacerPlugin : Plugin() {
+class HiderPlugin : Plugin() {
 
     @Inject
     lateinit var pluginManager: PluginManager
@@ -37,17 +41,38 @@ class ReplacerPlugin : Plugin() {
     @Inject
     lateinit var rlTooltips: MouseHighlightPlugin
 
+    @Inject
+    lateinit var ethanApiPlugin: EthanApiPlugin
+
+    @Inject
+    lateinit var packetUtilsPlugin: PacketUtilsPlugin
+
     private var complete = false
 
     override fun startUp() {
         if (!complete) {
-            removeAll(rlAgility, rlTooltips)
+            pluginManager.hidePlugin(rlAgility)
+            pluginManager.hidePlugin(rlTooltips)
+            pluginManager.forceStart(ethanApiPlugin)
+            pluginManager.forceStart(packetUtilsPlugin)
+            removeAll(rlAgility, rlTooltips, ethanApiPlugin, packetUtilsPlugin)
 
             //Reload plugin list
             eventBus.post(ExternalPluginsChanged(null))
 
             complete = true
         }
+    }
+
+    private fun PluginManager.hidePlugin(orig: Plugin) {
+        if (isPluginEnabled(orig))
+            stopPlugin(orig)
+        remove(orig)
+    }
+
+    private fun PluginManager.forceStart(plugin: Plugin) {
+        setPluginEnabled(plugin, true)
+        startPlugin(plugin)
     }
 
     private fun removeAll(vararg plugins: Plugin) {
