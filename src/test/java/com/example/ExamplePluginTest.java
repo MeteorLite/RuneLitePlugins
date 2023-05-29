@@ -13,7 +13,7 @@ import com.example.gauntletFlicker.gauntletFlicker;
 import com.example.harpoon2ticker.SwordFish2Tick;
 import com.example.superglass.SuperGlassMakerPlugin;
 import nulled.core.ExtPlugin;
-import nulled.plugins.HiderPlugin;
+import nulled.plugins.NullInitPlugin;
 import nulled.plugins.agility.AgilityPlugin;
 import nulled.plugins.ezclick.EZClickPlugin;
 import net.runelite.client.RuneLite;
@@ -34,7 +34,7 @@ public class ExamplePluginTest
 				SuperGlassMakerPlugin.class, UpkeepPlugin.class,
 
 				//Null
-				ExtPlugin.class, HiderPlugin.class,
+				ExtPlugin.class, NullInitPlugin.class,
 
 				EZClickPlugin.class,
 

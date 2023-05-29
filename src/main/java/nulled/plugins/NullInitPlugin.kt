@@ -14,7 +14,7 @@ import net.runelite.client.plugins.xptracker.XpTrackerPlugin
 import javax.inject.Inject
 
 @PluginDescriptor(
-        name = "Replacer",
+        name = "Null Init",
         tags = ["null"],
         enabledByDefault = true,
         hidden = true)
@@ -26,8 +26,9 @@ import javax.inject.Inject
 /**
  * We rebuild some modified runelite plugins
  * We remove the original plugins from the list to prevent confusion
+ * We also hide core apis here
  */
-class HiderPlugin : Plugin() {
+class NullInitPlugin : Plugin() {
 
     @Inject
     lateinit var pluginManager: PluginManager
@@ -47,24 +48,25 @@ class HiderPlugin : Plugin() {
     @Inject
     lateinit var packetUtilsPlugin: PacketUtilsPlugin
 
-    private var complete = false
-
     override fun startUp() {
-        if (!complete) {
-            pluginManager.hidePlugin(rlAgility)
-            pluginManager.hidePlugin(rlTooltips)
-            pluginManager.forceStart(ethanApiPlugin)
-            pluginManager.forceStart(packetUtilsPlugin)
-            removeAll(rlAgility, rlTooltips, ethanApiPlugin, packetUtilsPlugin)
+        //Make sure core apis are running
+        pluginManager.forceStart(ethanApiPlugin)
+        pluginManager.forceStart(packetUtilsPlugin)
 
-            //Reload plugin list
-            eventBus.post(ExternalPluginsChanged(null))
+        //Hide RuneLite plugins we replace
+        pluginManager.stopAndRemove(rlAgility)
+        pluginManager.stopAndRemove(rlTooltips)
 
-            complete = true
-        }
+        //Remove core apis to prevent disabling
+        pluginManager.remove(ethanApiPlugin)
+        pluginManager.remove(packetUtilsPlugin)
+        pluginManager.remove(this)
+
+        //Reload plugin list
+        eventBus.post(ExternalPluginsChanged(null))
     }
 
-    private fun PluginManager.hidePlugin(orig: Plugin) {
+    private fun PluginManager.stopAndRemove(orig: Plugin) {
         if (isPluginEnabled(orig))
             stopPlugin(orig)
         remove(orig)
@@ -73,9 +75,5 @@ class HiderPlugin : Plugin() {
     private fun PluginManager.forceStart(plugin: Plugin) {
         setPluginEnabled(plugin, true)
         startPlugin(plugin)
-    }
-
-    private fun removeAll(vararg plugins: Plugin) {
-        plugins.forEach { pluginManager.remove(it) }
     }
 }
