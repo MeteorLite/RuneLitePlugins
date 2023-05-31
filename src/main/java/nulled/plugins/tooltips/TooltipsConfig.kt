@@ -22,45 +22,26 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package nulled.plugins.tooltips;
+package nulled.plugins.tooltips
 
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
+import net.runelite.client.config.Config
+import net.runelite.client.config.ConfigGroup
+import net.runelite.client.config.ConfigItem
 
 @ConfigGroup("mousehighlight")
-public interface TooltipsConfig extends Config
-{
-	@ConfigItem(
-		position = 0,
-		keyName = "uiTooltip",
-		name = "Interface Tooltips",
-		description = "Whether or not tooltips are shown on interfaces"
-	)
-	default boolean uiTooltip()
-	{
-		return true;
-	}
+interface TooltipsConfig : Config {
+    @ConfigItem(position = 0, keyName = "uiTooltip", name = "Interface Tooltips", description = "Whether or not tooltips are shown on interfaces")
+    fun uiTooltip(): Boolean {
+        return true
+    }
 
-	@ConfigItem(
-		position = 1,
-		keyName = "chatboxTooltip",
-		name = "Chatbox Tooltips",
-		description = "Whether or not tooltips are shown over the chatbox"
-	)
-	default boolean chatboxTooltip()
-	{
-		return true;
-	}
+    @ConfigItem(position = 1, keyName = "chatboxTooltip", name = "Chatbox Tooltips", description = "Whether or not tooltips are shown over the chatbox")
+    fun chatboxTooltip(): Boolean {
+        return true
+    }
 
-	@ConfigItem(
-		position = 2,
-		keyName = "disableSpellbooktooltip",
-		name = "Disable Spellbook Tooltips",
-		description = "Disable Spellbook Tooltips so they don't cover descriptions"
-	)
-	default boolean disableSpellbooktooltip()
-	{
-		return false;
-	}
+    @ConfigItem(position = 2, keyName = "disableSpellbooktooltip", name = "Disable Spellbook Tooltips", description = "Disable Spellbook Tooltips so they don't cover descriptions")
+    fun disableSpellbooktooltip(): Boolean {
+        return false
+    }
 }
