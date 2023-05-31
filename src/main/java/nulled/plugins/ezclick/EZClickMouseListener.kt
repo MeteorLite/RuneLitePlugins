@@ -26,25 +26,41 @@ package nulled.plugins.ezclick
 
 import net.runelite.client.input.MouseAdapter
 import java.awt.event.MouseEvent
-import javax.inject.Inject
+import javax.swing.SwingUtilities
 
 class EZClickMouseListener(var plugin: EZClickPlugin) : MouseAdapter() {
+
     override fun mousePressed(e: MouseEvent): MouseEvent {
-        val mousePos = e.point
-        for (ezClick in plugin.validEZClicks) {
-            if (ezClick.overlay.bounds.contains(mousePos)) {
-                plugin.handleOverlayClick(ezClick)
+        if (!SwingUtilities.isLeftMouseButton(e))
+            return super.mousePressed(e)
+
+        filterEZClickToggle(e, true)
+        if (EZClickPlugin.ezClickActive)
+            if (!e.isConsumed) {
                 e.consume()
+                plugin.clientThread.invoke(Runnable {
+                    plugin.runningEZClick?.handleAction()
+                })
             }
-        }
         return e
     }
 
-    override fun mouseMoved(mouseEvent: MouseEvent?): MouseEvent {
-        return super.mouseMoved(mouseEvent)
+    override fun mouseClicked(e: MouseEvent): MouseEvent {
+        if (!SwingUtilities.isLeftMouseButton(e))
+            return super.mouseClicked(e)
+
+        filterEZClickToggle(e, false)
+        return e
     }
 
-    override fun mouseDragged(mouseEvent: MouseEvent?): MouseEvent {
-        return super.mouseDragged(mouseEvent)
+    fun filterEZClickToggle(e: MouseEvent, toggle: Boolean) {
+        val mousePos = e.point
+        for (ezClick in plugin.validEZClicks) {
+            if (ezClick.overlay.bounds.contains(mousePos)) {
+                if (toggle)
+                    plugin.handleOverlayClick(ezClick)
+                e.consume()
+            }
+        }
     }
 }

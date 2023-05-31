@@ -25,6 +25,7 @@ class CanifisNetHuntingEZClick(var plugin: EZClickPlugin) : EZClick() {
 
     init {
         validChecks.add(this::locationCheck)
+        validChecks.add(this::itemsCheck)
     }
 
     override var overlay: EZClickOverlayPanel = CanifisNetHuntingOverlay(plugin, this)
@@ -51,12 +52,15 @@ class CanifisNetHuntingEZClick(var plugin: EZClickPlugin) : EZClick() {
         return plugin.client.localPlayer.worldLocation.regionID == 14133
     }
 
-    override fun onStart() {
-        EZClickPlugin.ezClickActive = true
+    fun itemsCheck() : Boolean {
+        if (Items.inventoryContains(ItemID.ROPE))
+            if (Items.inventoryContains(ItemID.SMALL_FISHING_NET))
+                return true
+        return false
     }
 
-    override fun onClientTick() {
-
+    override fun onStart() {
+        EZClickPlugin.ezClickActive = true
     }
 
     @Subscribe

@@ -1,6 +1,5 @@
 package nulled.plugins.ezclick
 
-import net.runelite.api.events.ClientTick
 import nulled.plugins.ezclick.overlay.EZClickOverlayPanel
 import kotlin.reflect.KFunction
 
@@ -14,11 +13,10 @@ open class EZClick {
 
     fun isValid(): Boolean {
         validChecks.forEach {
-            if (it.call()) {
-                return true
-            }
+            if (!it.call())
+                return false
         }
-        return false
+        return true
     }
 
     open fun handleAction() {
@@ -30,10 +28,6 @@ open class EZClick {
     }
 
     open fun onStop() {
-
-    }
-
-    open fun onClientTick() {
 
     }
 }

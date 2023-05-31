@@ -13,6 +13,7 @@ import net.runelite.api.events.ClientTick
 import net.runelite.api.events.GameTick
 import net.runelite.api.events.MenuOptionClicked
 import net.runelite.api.widgets.Widget
+import net.runelite.client.callback.ClientThread
 import net.runelite.client.eventbus.EventBus
 import net.runelite.client.eventbus.Subscribe
 import net.runelite.client.input.MouseManager
@@ -38,13 +39,13 @@ class EZClickPlugin : Plugin() {
     lateinit var mouseManager: MouseManager
 
     @Inject
-    lateinit var tooltipManager: TooltipManager
-
-    @Inject
     lateinit var overlayManager: OverlayManager
 
     @Inject
     lateinit var eventBus: EventBus
+
+    @Inject
+    lateinit var clientThread: ClientThread
 
     val mouseListener = EZClickMouseListener(this)
 
@@ -95,11 +96,6 @@ class EZClickPlugin : Plugin() {
                     validEZClicks.add(ezClick)
                     overlayManager.add(ezClick.overlay)
                 }
-    }
-
-    @Subscribe(priority = Float.MAX_VALUE)
-    fun onClientTick(clientTick: ClientTick) {
-        runningEZClick?.onClientTick()
     }
 
     fun handleOverlayClick(ezClick: EZClick) {
@@ -155,7 +151,6 @@ class EZClickPlugin : Plugin() {
         println("Option: " + menuOptionClicked.menuOption)
         println("Target: " + menuOptionClicked.menuTarget)
         if (ezClickActive) menuOptionClicked.consume()
-        runningEZClick?.handleAction()
         if (ezHouseAltar) {
             if (boneToOffer != null) {
                 MousePackets.queueClickPacket()
