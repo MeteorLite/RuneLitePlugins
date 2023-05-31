@@ -1,5 +1,7 @@
 package nulled.ext
 
+import com.example.Packets.MousePackets
+import com.example.Packets.TileItemPackets
 import net.runelite.api.Tile
 import net.runelite.api.TileItem
 import net.runelite.api.coords.WorldPoint
@@ -25,4 +27,10 @@ object Loots {
 
     val TileItem.notedId
         get() = API.client.getItemDefinition(id).linkedNoteId
+
+    fun TileItem.interact(ctrlDown: Boolean) {
+        println("Sending Interaction!")
+        MousePackets.queueClickPacket()
+        TileItemPackets.queueTileItemAction(3, id, tile!!.worldX, tile!!.worldY, ctrlDown)
+    }
 }

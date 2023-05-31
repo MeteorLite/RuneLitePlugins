@@ -60,6 +60,18 @@ class TooltipsOverlay @Inject internal constructor(client: Client, config: Toolt
     }
 
     override fun render(graphics: Graphics2D): Dimension? {
+        if (ezClickActive) {
+            for (tooltip in headerTooltips) {
+                tooltipManager.add(tooltip)
+            }
+            for (tooltip in problemTooltips) {
+                tooltipManager.add(tooltip)
+            }
+            for (tooltip in validTooltips) {
+                tooltipManager.add(tooltip)
+            }
+        }
+
         if (client.isMenuOpen) {
             return null
         }
@@ -110,15 +122,6 @@ class TooltipsOverlay @Inject internal constructor(client: Client, config: Toolt
         val tooltipDisplayed = client.getVarcIntValue(VarClientInt.TOOLTIP_VISIBLE)
         if (tooltipDisplayed == 1) {
             return null
-        }
-        for (tooltip in headerTooltips) {
-            tooltipManager.add(tooltip)
-        }
-        for (tooltip in problemTooltips) {
-            tooltipManager.add(tooltip)
-        }
-        for (tooltip in validTooltips) {
-            tooltipManager.add(tooltip)
         }
 
         //Draw normal click tooltips on top

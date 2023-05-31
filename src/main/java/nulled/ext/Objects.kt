@@ -1,5 +1,6 @@
 package nulled.ext
 
+import com.example.InteractionApi.TileObjectInteraction
 import net.runelite.api.*
 import nulled.core.API
 
@@ -15,5 +16,9 @@ object Objects {
             if (action == objAction)
                 return true
         return false
+    }
+
+    fun TileObject.interact(action: String) {
+        TileObjectInteraction.interact(this, action)
     }
 }

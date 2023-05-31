@@ -15,6 +15,7 @@ import com.example.superglass.SuperGlassMakerPlugin;
 import nulled.core.ExtPlugin;
 import nulled.plugins.NullInitPlugin;
 import nulled.plugins.agility.AgilityPlugin;
+import nulled.plugins.devtools.DevToolsPlugin;
 import nulled.plugins.ezclick.EZClickPlugin;
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
@@ -34,7 +35,7 @@ public class ExamplePluginTest
 				SuperGlassMakerPlugin.class, UpkeepPlugin.class,
 
 				//Null
-				ExtPlugin.class, NullInitPlugin.class,
+				ExtPlugin.class, NullInitPlugin.class, DevToolsPlugin.class,
 
 				EZClickPlugin.class,
 

@@ -1,5 +1,6 @@
 package nulled.ext
 
+import com.example.InteractionApi.InventoryInteraction
 import net.runelite.api.Item
 import nulled.core.API
 
@@ -25,5 +26,10 @@ object Item {
             if (action == invAction)
                 return true
         return false
+    }
+
+    fun Item.interact(action: String) : Boolean {
+        InventoryInteraction.useItem(id, action)
+        return true
     }
 }

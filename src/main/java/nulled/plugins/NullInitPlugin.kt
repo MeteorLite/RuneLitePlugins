@@ -9,6 +9,7 @@ import net.runelite.client.plugins.PluginDependency
 import net.runelite.client.plugins.PluginDescriptor
 import net.runelite.client.plugins.PluginManager
 import net.runelite.client.plugins.agility.AgilityPlugin
+import net.runelite.client.plugins.devtools.DevToolsPlugin
 import net.runelite.client.plugins.mousehighlight.MouseHighlightPlugin
 import net.runelite.client.plugins.xptracker.XpTrackerPlugin
 import javax.inject.Inject
