@@ -52,7 +52,15 @@ open class EZClickOverlayPanel(
         }
     }
 
-    override fun render(graphics: Graphics2D?): Dimension {
+    private var setSize = false
+
+    override fun render(graphics: Graphics2D): Dimension {
+        if (!setSize) {
+            panelComponent.preferredSize = Dimension(
+                    graphics.fontMetrics.stringWidth(text) + 10,
+                    0)
+            setSize = true
+        }
         return panelComponent.render(graphics)
     }
 }

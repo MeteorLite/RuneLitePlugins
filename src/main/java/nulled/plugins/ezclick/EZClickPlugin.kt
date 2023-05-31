@@ -1,15 +1,9 @@
 package nulled.plugins.ezclick
 
-import com.example.EthanApiPlugin.Collections.Inventory
-import com.example.EthanApiPlugin.Collections.TileObjects
 import com.example.EthanApiPlugin.EthanApiPlugin
 import com.example.PacketUtils.PacketUtilsPlugin
-import com.example.Packets.MousePackets
-import com.example.Packets.ObjectPackets
 import net.runelite.api.Client
-import net.runelite.api.MenuEntry
 import net.runelite.api.TileObject
-import net.runelite.api.events.ClientTick
 import net.runelite.api.events.GameTick
 import net.runelite.api.events.MenuOptionClicked
 import net.runelite.api.widgets.Widget
@@ -22,9 +16,9 @@ import net.runelite.client.plugins.PluginDependency
 import net.runelite.client.plugins.PluginDescriptor
 import net.runelite.client.ui.overlay.OverlayManager
 import net.runelite.client.ui.overlay.tooltip.Tooltip
-import net.runelite.client.ui.overlay.tooltip.TooltipManager
 import net.runelite.client.util.ColorUtil
-import nulled.plugins.ezclick.hunter.net.CanifisNetHuntingEZClick
+import nulled.plugins.ezclick.plugins.hunter.nettrap.canifis.CanifisNetHuntingEZClick
+import nulled.plugins.ezclick.plugins.prayer.housealtar.HouseAltarEZClick
 import java.awt.Color
 import javax.inject.Inject
 
@@ -50,8 +44,6 @@ class EZClickPlugin : Plugin() {
     val mouseListener = EZClickMouseListener(this)
 
     var header = Tooltip(ColorUtil.prependColorTag("EZClick", Color.CYAN))
-    var missingBonesTooltip = Tooltip(ColorUtil.prependColorTag("Missing: Bones to offer", Color.RED))
-    var boneToOfferTooltip = Tooltip("")
 
     var ezClicks = ArrayList<EZClick>()
     var validEZClicks = ArrayList<EZClick>()
@@ -61,7 +53,9 @@ class EZClickPlugin : Plugin() {
     var runningColor = Color(24, 82, 24)
 
     init {
-        ezClicks.add(CanifisNetHuntingEZClick(this))
+        ezClicks.addAll(arrayOf(
+                CanifisNetHuntingEZClick(this),
+                HouseAltarEZClick(this)))
     }
 
     override fun startUp() {
@@ -84,6 +78,11 @@ class EZClickPlugin : Plugin() {
             if (!ezClick.isValid())
                 toRemove.add(ezClick)
         for (ezClick in toRemove) {
+            if (ezClick.isRunning) {
+                ezClickActive = false
+                stopEzClick(ezClick)
+                runningEZClick = null
+            }
             validEZClicks.remove(ezClick)
             overlayManager.remove(ezClick.overlay)
         }
@@ -98,13 +97,17 @@ class EZClickPlugin : Plugin() {
                 }
     }
 
+    fun stopEzClick(ezClick: EZClick) {
+        eventBus.unregister(ezClick)
+        ezClick.onStop()
+        ezClick.isRunning = false
+        ezClick.overlay.panelComponent.backgroundColor = notRunningColor
+    }
+
     fun handleOverlayClick(ezClick: EZClick) {
         if (ezClick.isRunning) {
             ezClickActive = false
-            eventBus.unregister(ezClick)
-            ezClick.onStop()
-            ezClick.isRunning = false
-            ezClick.overlay.panelComponent.backgroundColor = notRunningColor
+            stopEzClick(ezClick)
             runningEZClick = null
         } else {
             ezClickActive = true
@@ -127,36 +130,9 @@ class EZClickPlugin : Plugin() {
     var boneToOffer: Widget? = null
     var altar: TileObject? = null
 
-    fun processHouseAltarTooltips(menu: MenuEntry): Boolean {
-        var foundHouseAlter = false
-        if (menu.option == "Pray" && menu.target == "<col=ffff>Altar") {
-            foundHouseAlter = true
-            addIfMissing(headerTooltips, header)
-            val bonesToOffer = Inventory.search().nameContains("bones").withAction("Bury").result()
-            val bonesToOfferSize = bonesToOffer.size
-            if (bonesToOfferSize == 0) {
-                addIfMissing(problemTooltips, missingBonesTooltip)
-            } else {
-                boneToOffer = bonesToOffer[0]
-                boneToOfferTooltip.text = ColorUtil.prependColorTag(boneToOffer!!.name, Color.GREEN)
-                addIfMissing(validTooltips, boneToOfferTooltip)
-                altar = TileObjects.search().nameContains("Altar").withAction("Pray").result()[0]
-            }
-        }
-        return foundHouseAlter
-    }
-
     @Subscribe
     fun onMenuOptionClicked(menuOptionClicked: MenuOptionClicked) {
-        println("Option: " + menuOptionClicked.menuOption)
-        println("Target: " + menuOptionClicked.menuTarget)
         if (ezClickActive) menuOptionClicked.consume()
-        if (ezHouseAltar) {
-            if (boneToOffer != null) {
-                MousePackets.queueClickPacket()
-                ObjectPackets.queueWidgetOnTileObject(boneToOffer, altar)
-            }
-        }
     }
 
     fun reset() {
@@ -169,6 +145,5 @@ class EZClickPlugin : Plugin() {
         var problemTooltips = ArrayList<Tooltip>()
         var validTooltips = ArrayList<Tooltip>()
         var ezClickActive = false
-        var ezHouseAltar = false
     }
 }

@@ -1,11 +1,11 @@
-package nulled.plugins.ezclick.hunter.net
+package nulled.plugins.ezclick.plugins.hunter.nettrap
 
 import net.runelite.api.Tile
 import net.runelite.api.coords.WorldPoint
 import nulled.ext.runelite.WorldPoint.getTile
 
-class NetTrap(var trapPoint: WorldPoint,
-              var lootPoint: WorldPoint) {
+open class NetTrap(var trapPoint: WorldPoint,
+                   var lootPoint: WorldPoint) {
 
     companion object {
         val TRAP_ONE = NetTrap(

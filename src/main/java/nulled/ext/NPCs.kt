@@ -4,7 +4,7 @@ import net.runelite.api.NPC
 
 object NPCs {
     val NPC.transformedId
-        get() = composition.transform().id
+        get() = composition.id
     val NPC.transformedName
-        get() = composition.transform().name
+        get() = composition.name
 }
