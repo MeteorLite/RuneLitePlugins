@@ -28,6 +28,8 @@ dependencies {
 	testImplementation(group = "net.runelite", name = "jshell", version = runeLiteVersion)
 	implementation("org.json:json:20230227")
 	implementation("org.jetbrains.kotlin:kotlin-reflect:1.8.21")
+	implementation("org.roaringbitmap:RoaringBitmap:0.9.44")
+
 }
 
 group = "com.example"

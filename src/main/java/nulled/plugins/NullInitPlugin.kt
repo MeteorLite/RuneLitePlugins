@@ -64,7 +64,7 @@ class NullInitPlugin : Plugin() {
         pluginManager.remove(this)
 
         //Reload plugin list
-        eventBus.post(ExternalPluginsChanged(null))
+        eventBus.post(ExternalPluginsChanged())
     }
 
     private fun PluginManager.stopAndRemove(orig: Plugin) {
